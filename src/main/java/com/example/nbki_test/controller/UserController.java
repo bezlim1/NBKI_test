@@ -2,14 +2,16 @@ package com.example.nbki_test.controller;
 
 import com.example.nbki_test.entity.User;
 import com.example.nbki_test.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/start")
 public class UserController {
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/get/{id}")
     public Optional<User> searchUserById(@PathVariable Integer id) {
