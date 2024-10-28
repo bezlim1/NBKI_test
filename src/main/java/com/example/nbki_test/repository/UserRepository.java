@@ -8,8 +8,4 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    Optional<User> findById(Integer id);
-    void deleteById (Integer id);
-    User save (User user);
-
 }
