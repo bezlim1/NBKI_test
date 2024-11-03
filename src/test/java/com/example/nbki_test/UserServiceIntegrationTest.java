@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.StopWatch;
@@ -33,7 +32,7 @@ public class UserServiceIntegrationTest {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        int batchSize = 1000;
+        int batchSize = 1000; // Используем пакеты для обработки
 
         for (int i = 0; i < 100000; i += batchSize) {
             User user = new User();
@@ -42,9 +41,9 @@ public class UserServiceIntegrationTest {
         }
 
         stopWatch.stop();
-        System.out.println("Time taken to create 100k users: " + stopWatch.getTotalTimeMillis() + " ms");
+        System.out.println("Время, затраченное на создание 100 тысяч пользователей: " +
+                stopWatch.getTotalTimeMillis() + " ms");
     }
-
 
 
     @Test
@@ -68,7 +67,8 @@ public class UserServiceIntegrationTest {
                 for (int j = 0; j < totalRecords / numConnections; j++) {
                     int randomId = ids.get(j); // Используем подготовленный список ID
                     long startTime = System.currentTimeMillis();
-                    ResponseEntity<User> response = restTemplate.getForEntity("/start/" + randomId, User.class);
+                    ResponseEntity<User> response = restTemplate.getForEntity("/start/" +
+                            randomId, User.class);
                     long endTime = System.currentTimeMillis();
 
                     if (response.getStatusCode() == HttpStatus.OK) {
@@ -86,32 +86,27 @@ public class UserServiceIntegrationTest {
 
         stopWatch.stop();
 
-        // Сбор статистики
         long totalTime = stopWatch.getTotalTimeMillis();
-        System.out.println("Total time for selecting 1M users: " + totalTime + " ms");
+        System.out.println("Общее время, затраченное на отбор 1 млн пользователей: " + totalTime + " ms");
 
-        // Вычисление средней продолжительности запроса
         double averageTime = times.stream().mapToLong(Long::longValue).average().orElse(0.0);
-        System.out.println("Average time per request: " + averageTime + " ms");
+        System.out.println("Среднее время выполнения одного запроса: " + averageTime + " ms");
 
-        // Вычисление медианы
+
         Collections.sort(times);
 
         if (times.isEmpty()) {
-            System.out.println("No times recorded.");
+            System.out.println("Время не записано.");
         } else {
             double medianTime;
             int size = times.size();
             if (size % 2 == 0) {
-                // Для четного количества элементов
                 medianTime = (times.get(size / 2 - 1) + times.get(size / 2)) / 2.0;
             } else {
-                // Для нечетного количества элементов
                 medianTime = times.get(size / 2);
             }
-            System.out.println("Median time per request: " + medianTime + " ms");
+            System.out.println("Медианное время выполнения одного запроса: " + medianTime + " ms");
         }
-
         executorService.shutdown();
     }
 }
