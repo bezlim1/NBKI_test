@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = {UserService.class})
-public class UserServiceTests {
+public class UserRepositoryTests {
 
     @MockBean
     private static UserRepository userRepository;
@@ -57,7 +57,7 @@ public class UserServiceTests {
         for (int i = 0; i < 100_000; i++) {
             User user = new User();
             user.setName("User" + i);
-   //         System.out.println("Trying to save user with name: " + user.getName());
+            //         System.out.println("Trying to save user with name: " + user.getName());
             userService.saveUser(user);
         }
 
